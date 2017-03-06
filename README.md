@@ -14,7 +14,9 @@
 
 ## 설치
 `$ sudo easy_install virtualenv `
+
 or
+
 `$ sudo pip install virtualenv`
 
 ## 시작
@@ -32,9 +34,10 @@ if __name__ == '__main__':
 
 http://127.0.0.1:5000/ 이동 후 정상 출력되면 끗
 
-### 디버그 모드
+#### 디버그 모드
 
-```app.debug = True
+```
+app.debug = True
 app.run()
 ```
 
