@@ -1,4 +1,4 @@
-# python_flask
+# Python + Flask
 
 # Flask
 
@@ -49,9 +49,9 @@ $ pip install Flask
 ```
 
 #### 시스템 전체에 적용하여 설치 (노추천함)
-```
-$ sudo pip install Flask
-```
+
+~~$ sudo pip install Flask~~
+
 
 
 
@@ -72,7 +72,7 @@ if __name__ == '__main__':
 $ python hello.py
 ```
 
-http://127.0.0.1:5000/ 이동 후 정상 출력되면 끗
+http://127.0.0.1:5000/ 이동 후 정상 접속되면 끗
 
 #### 디버그 모드
 
@@ -155,8 +155,53 @@ def hello(name=None):
 
 ## 데이터 전달 (POST, GET)
 
-### Session 저장
+login.html 생성
+```
+{% if username %}
+<p class="username">{{ username }}</p>
+{% endif %}
+<form >
+    <span>username : </span> <input type='text' name='username'/>
+    <input type='submit' value='Send'/>
+</form>
+```
 
+
+```
+...
+from flask import Flask, render_template, request
+@app.route('/login')
+@app.route('/login', methodes=['GET', 'POST'])
+def login():
+    retrun render_template('login.html', username=request.form['username'])
+...
+```
+
+
+* Session 저장
+
+```
+from flask import Flask, render_template, request, session
+@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
+def login()
+    if request.method == 'POST':
+        session['username'] = request.form['username']
+    return render_template('login.html')
+
+...
+app.secret_key = 'session secret_key'
+
+```
+secret key 설정을 안해주면 error
+
+login.html 수정
+```
+{% if session.usernsme %}
+<p>{{ session.username }}</p>
+{% endif %}
+...
+```
 
 # 예제
 
