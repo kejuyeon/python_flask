@@ -206,9 +206,102 @@ login.html 수정
 # 예제
 
 ## 로그인
-## 글쓰기 디비 사용
+함께 만들어 봅시다.
+
+login.py
+```
+@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        print(request.form['user_id'])
+        session['user_id'] = request.form['user_id']
+    return render_template('main.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)
+    return redirect(url_for('index'))
+```
 
 
+login.html
+```
+{% if not session.user_id %}
+    <form action="{{ url_for( 'index' ) }}" method="POST">
+        <input type="text" name="user_id" placeholder="id"/><br/>
+        <input type="password" name="user_pass" placeholder="password"/><br/>
+        <input type="submit" value="Login">
+    </form>
+{% else %}
+    <p class="username">{{ session.user_id }}</p> 접속했습니다.
+    <a href="{{ url_for('logout') }}">logout</a>
+{% endif %}
+```
+
+## 글쓰기 예제 (디비 사용)
+
+python 파일 수정
+```
+from flask import ..., _app_ctx_stack
+from sqlite3 import dbapi2 as sqlite3
+```
+
+```
+# 데이터 베이스 설정
+DATABASE = '/tmp/flaskr.db'
+DEBUG = True
+SECRET_KEY = 'development key'
+USERNAME = 'admin'
+PASSWORD = 'default'
+
+# 설정값 불러오기
+app.config.from_object(__name__)
+# app.config.from_envvar('FLASKR_SETTINGS', silent=True)
+```
+
+schema.sql 파일 생성
+```
+drop table if exists entries;
+create table entries (
+  id integer primary key autoincrement,
+  title string not null,
+  text string not null
+);
+```
+
+DB 접속 및 sql 파일을 불러와 데이터 베이스 생성
+```
+def init_db():
+    ''' create databace '''
+    with app.app_context():
+        top = _app_ctx_stack.top
+        if not hasattr(top, 'sqlite_db'):
+            sqlite_db = sqlite3.connect(app.config['DATABASE'])
+            sqlite_db.row_factory = sqlite3.Row
+            top.sqlite_db = sqlite_db
+        db = top.sqlite_db
+        with app.open_resource('schema.sql', mode='r') as f:
+            db.cursor().executescript(f.read())
+        db.commit()
+```
+
+write.html
+```
+<h1>Write</h1>
+
+<form method="POST">
+    <input type="text" name="title" placeholder="제목을 입력해주세요"><br>
+    <textarea name="content" placeholder="내용을 입력해주세요."></textarea><br>
+    <input type="submit" value="Submit">
+</form>
+
+{% if noties %}
+{% for notice in noties%}
+    <span>{{notice.title}}</span> / <span>{{notice.text}}</span> <br>
+{% endfor %}
+{% endif %}
+```
 
 
 
