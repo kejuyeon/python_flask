@@ -1,5 +1,4 @@
 # Study <img height="35" src="https://www.python.org/static/img/python-logo@2x.png"></img> + <img height="35" src="http://flask-docs-kr.readthedocs.io/ko/latest/_images/logo-full1.png"></img>
->>>>>>> 76666d8a434b536c2d88e8a352c9c53ec5a8d630
 
 # Flask
 
@@ -172,8 +171,10 @@ login.html 생성
 ...
 from flask import Flask, render_template, request
 @app.route('/login')
-@app.route('/login', methodes=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        retrun render_template('login.html', username=request.form['username'])  
     retrun render_template('login.html', username=request.form['username'])
 ...
 ```
