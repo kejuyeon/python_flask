@@ -1,7 +1,7 @@
 # Study Python + Flask
-(https://www.python.org/static/img/python-logo.png)
-+
-(http://flask-docs-kr.readthedocs.io/ko/latest/_images/logo-full1.png)
+
+<img height="50" src="https://www.python.org/static/img/python-logo@2x.png"></img>
+<img height="50" src="http://flask-docs-kr.readthedocs.io/ko/latest/_images/logo-full1.png"></img>
 
 # Flask
 
